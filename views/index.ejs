@@ -6,24 +6,22 @@
         <link type="text/css" rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <section  id="app">
+        <section id="app">
             <h1 class="title">このレビューについてのレビュー</h1>
             <div class="btn"><button class="createBtn"><a href="/create">レビューを書く</a></button></div>
-            <span>
-                並び替え：<select class="search__sorting" name="sort">
+            <span> 並び替え：<select class="search__sorting" name="sort">
                     <option value="選択してください">選択してください</option>
                     <option value="高い順">高い順</option>
                     <option value="低い順">低い順</option>
                 </select>
             </span>
-            <span>
-                フィルター：<select name="filter">
+            <span> フィルター：<select class="search__filter" name="filter">
                     <option value="選択してください">選択してください</option>
-                    <option value="星1">星1</option>
-                    <option value="星2">星2</option>
-                    <option value="星3">星3</option>
-                    <option value="星4">星4</option>
-                    <option value="星5">星5</option>
+                    <option value="1">星1</option>
+                    <option value="2">星2</option>
+                    <option value="3">星3</option>
+                    <option value="4">星4</option>
+                    <option value="5">星5</option>
                 </select>
             </span>
             <div class="list">
@@ -63,8 +61,12 @@
             let nodeApp = document.querySelector('#app');
 
             // セレクトボックスのイベントハンドラを登録
+            // 並び替え
             let nodeSelect = nodeApp.querySelector('.search__sorting');
             nodeSelect.addEventListener('change', onOrderChanged, false);
+            // フィルター
+            let nodeSelect2 = nodeApp.querySelector('.search__filter');
+            nodeSelect2.addEventListener('change', onFilterChanged, false);
 
             // 初期表示時のレビューノードリスト（保存用）
             let nodeItemsOrg = nodeApp.querySelectorAll('.listItem');
@@ -120,6 +122,43 @@
                         nodeList.appendChild(newList[i]);
                     }
                 }
+            }
+            // フィルターの変更イベントハンドラ
+            function onFilterChanged(event) {
+                let nodeItems = nodeApp.querySelectorAll('.listItem'); // レビューノードのリスト
+                // レビューノードのリストを新しい配列に詰め替える
+                let newList = [];
+                for (let i = 0; i < nodeItems.length; i++) {
+                    newList.push(nodeItems[i]);
+                }
+                // 全てのレビューノードをいったん表示する
+                for (let i = 0; i < nodeItems.length; i++) {
+                    showNode(nodeItems[i]);
+                }
+                //「選択してください」が選択されている場合
+                if (event.target.value === '選択してください') {
+                    // 初期表示時のレビューノードを復元する
+                    for (let i = 0; i < newList.length; i++) {
+                        nodeList.appendChild(nodeItemsOrg[i]);
+                    }
+                }
+                //「選択してください」以外が選択されている場合
+                else {
+                    for (let i = 0; i < nodeItems.length; i++) {
+                        if ((parseInt(nodeItems[i].querySelector('.rating').textContent)) !== parseInt(event.target.value)) {
+                            // このレビューを非表示にする
+                            hideNode(nodeItems[i]);
+                        }
+                    }
+                }
+            }
+            // ノードを非表示にする関数
+            function hideNode(node) {
+                node.setAttribute('style', 'display:none;');
+            }
+            // ノードを表示する関数
+            function showNode(node) {
+                node.removeAttribute('style');
             }
         </script>
     </body>
