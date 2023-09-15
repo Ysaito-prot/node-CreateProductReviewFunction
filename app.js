@@ -69,23 +69,4 @@ app.post("/update/:id", (req, res) => {
   });
 });
 
-app.get("/delete/:id", (req, res) => {
-  const sql = "DELETE FROM personas WHERE id = ?";
-  con.query(sql, [req.params.id], function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
-    res.redirect("/");
-  });
-});
-
-app.get("/userinfo/:id", (req, res) => {
-  const sql = "SELECT * FROM userdetail WHERE id = ?";
-  con.query(sql, [req.params.id], function (err, result, fields) {
-    if (err) throw err;
-    res.render("userinfo", {
-      user: result,
-    });
-  });
-});
-
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
