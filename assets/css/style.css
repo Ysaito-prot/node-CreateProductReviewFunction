@@ -92,3 +92,38 @@ li {
 .star5_rating[data-rate="1"]:after{ width: 20%; } /* 星1 */
 .star5_rating[data-rate="0.5"]:after{ width: 10%; } /* 星0.5 */
 .star5_rating[data-rate="0"]:after{ width: 0%; } /* 星0 */
+
+/* 入力フォーム */
+form {
+  width: 600px;
+  margin: auto;
+}
+.button {
+  text-align: center;
+  margin: 0 auto;
+}
+.submitBtn {
+  font-size: 20px;
+  width: 200px;
+  height: 50px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 0 10px 0 30px;
+}
+
+h1 {
+  text-align: center;
+}
+form input[type="text"],
+form textarea {
+  width: 600px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: rgba(118, 123, 204, 0.5);
+  margin-bottom: 10px;
+}
+.item {
+  margin-top: 20px;
+}

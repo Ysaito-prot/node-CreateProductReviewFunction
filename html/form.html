@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>入力フォーム</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+        <h1>入力フォーム</h1>
+        <form action="/" method="POST">
+            <div>
+                <label for="username">ユーザー名</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="age">年齢</label>
+                <input type="text" id="age" name="age" required>
+            </div>
+            <div>
+                <label for="rating">評価</label>
+                <input type="text" id="rating" name="rating" required>
+            </div>
+            <div>
+                <label for="reason">評価内容</label>
+                <textarea id="reason" name="reason" cols="36" rows="6" required></textarea>
+            </div>
+            <div class="button"><button class="submitBtn" type="submit">送信</button></div>
+        </form>
+    </body>
+</html>
