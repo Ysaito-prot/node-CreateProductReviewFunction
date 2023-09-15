@@ -8,6 +8,7 @@
     <body>
         <section id="app">
             <h1 class="title">このレビューについてのレビュー</h1>
+            <canvas id="stage"></canvas>
             <div class="btn"><button class="createBtn"><a href="/create">レビューを書く</a></button></div>
             <span> 並び替え：<select class="search__sorting" name="sort">
                     <option value="選択してください">選択してください</option>
@@ -45,6 +46,7 @@
                 </ul>
             </div>
         </section>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script>
             let users = JSON.parse('<%= JSON.stringify(users) %>'.replace(/&#34;/g, '"'));
             // 評価マークの表示
@@ -160,6 +162,62 @@
             function showNode(node) {
                 node.removeAttribute('style');
             }
+
+            // 年代毎のグラフ作成
+            //「年代別データ」
+            var mydata = {
+                labels: ["20代", "30代", "40代"],
+                datasets: [
+                    {
+                        label: '評価数',
+                        hoverBackgroundColor: "rgba(255,99,132,0.3)",
+                        data: [],
+                    }
+                ]
+            };
+            //「オプション設定」
+            var options = {
+                title: {
+                    display: true,
+                    text: '年代別評価数'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            display: true,
+                            suggestedMin: 0,
+                            suggestedMax: 80,
+                            stepSize: 10,
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                spanGaps: true,
+            };
+            let ageTokei = [
+                { age: "20代", count: 0 },
+                { age: "30代", count: 0 },
+                { age: "40代", count: 0 },
+            ];
+            for (let j = 0; j < users.length; j++) {
+                if (users[j].age >= 20 && users[j].age < 30) {
+                    ageTokei[0].count++;
+                }
+                if (users[j].age >= 30 && users[j].age < 40) {
+                    ageTokei[1].count++;
+                }
+                if (users[j].age >= 40 && users[j].age < 50) {
+                    ageTokei[2].count++;
+                }
+            }
+            mydata.datasets[0].data = [ageTokei[0].count, ageTokei[1].count, ageTokei[2].count]
+            var canvas = document.getElementById('stage');
+            var chart = new Chart(canvas, {
+                type: 'bar',  //グラフの種類
+                data: mydata,  //表示するデータ
+                options: options  //オプション設定
+            });
+            console.log(mydata.datasets[0].data)
         </script>
     </body>
 </html>
