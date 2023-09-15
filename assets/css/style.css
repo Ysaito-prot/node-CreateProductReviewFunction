@@ -1,0 +1,94 @@
+section {
+  width: 900px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+}
+h2 {
+  margin-bottom: 0;
+}
+.btn {
+  text-align: right;
+  margin-right: 50px;
+}
+.edit {
+  margin-bottom: 10px;
+}
+button a {
+  text-decoration: none;
+}
+.createBtn {
+  width: 200px;
+  padding: 10px;
+  background: #7b7979;
+  border: 1px solid;
+  border-radius: 5px;
+}
+.createBtn a {
+  font-size: 15px;
+  color: #fff;
+}
+li {
+  width: 800px;
+  padding-left: 30px;
+  border: 1px solid #eee;
+  list-style: none;
+  margin: auto;
+}
+.reviewList {
+  padding-left: 0;
+}
+.userInfo {
+  display: flex;
+}
+.age {
+  margin: auto 0;
+  margin-left: 30px;
+  color: #7b7979;
+  margin-bottom: 5px;
+}
+.reason {
+  background: #edeaea;
+  width: 720px;
+  padding: 20px;
+  margin: 10px 0;
+}
+
+/* 評価 */
+.star5_rating{
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  white-space: nowrap;
+  color: #CCCCCC; /* グレーカラー 自由に設定化 */
+  /*font-size: 30px; フォントサイズ 自由に設定化 */
+}
+
+.star5_rating:before, .star5_rating:after{
+  content: '★★★★★';
+}
+
+.star5_rating:after{
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #ffcf32; /* イエローカラー 自由に設定化 */
+}
+
+.star5_rating[data-rate="5"]:after{ width: 100%; } /* 星5 */
+.star5_rating[data-rate="4.5"]:after{ width: 90%; } /* 星4.5 */
+.star5_rating[data-rate="4"]:after{ width: 80%; } /* 星4 */
+.star5_rating[data-rate="3.5"]:after{ width: 70%; } /* 星3.5 */
+.star5_rating[data-rate="3"]:after{ width: 60%; } /* 星3 */
+.star5_rating[data-rate="2.5"]:after{ width: 50%; } /* 星2.5 */
+.star5_rating[data-rate="2"]:after{ width: 40%; } /* 星2 */
+.star5_rating[data-rate="1.5"]:after{ width: 30%; } /* 星1.5 */
+.star5_rating[data-rate="1"]:after{ width: 20%; } /* 星1 */
+.star5_rating[data-rate="0.5"]:after{ width: 10%; } /* 星0.5 */
+.star5_rating[data-rate="0"]:after{ width: 0%; } /* 星0 */

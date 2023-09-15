@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Review list</title>
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <section  id="app">
+            <h1 class="title">このレビューについてのレビュー</h1>
+            <div class="btn"><button class="createBtn"><a href="/create">レビューを書く</a></button></div>
+            <span>
+                並び替え：<select class="search__sorting" name="sort">
+                    <option value="選択してください">選択してください</option>
+                    <option value="高い順">高い順</option>
+                    <option value="低い順">低い順</option>
+                </select>
+            </span>
+            <span>
+                フィルター：<select name="filter">
+                    <option value="選択してください">選択してください</option>
+                    <option value="星1">星1</option>
+                    <option value="星2">星2</option>
+                    <option value="星3">星3</option>
+                    <option value="星4">星4</option>
+                    <option value="星5">星5</option>
+                </select>
+            </span>
+            <div class="list">
+                <ul class="reviewList">
+                    <% users.forEach(function (value) { %>
+                        <li class="listItem">
+                            <div class="userInfo">
+                                <h2 class="userName"><%= value.username %></h2>
+                                <div class="age"> 年齢：<%= value.age %>歳 </div>
+                            </div>
+                            <span class="star5_rating"></span>
+                            <span class="rating">
+                                <%= value.rating %>
+                            </span>
+                            <div class="reason">
+                                <%= value.reason %>
+                            </div>
+                            <div class="edit"><button class="editBtn"><a href="/edit/<%= value.id %>">レビューの更新</a></button></div>
+                        </li>
+                        <% }); %>
+                </ul>
+            </div>
+        </section>
+        <script>
+            let users = JSON.parse('<%= JSON.stringify(users) %>'.replace(/&#34;/g, '"'));
+            // 評価マークの表示
+            let star5_rating = document.querySelectorAll('.star5_rating');
+            for (let i = 0; i < users.length; i++) {
+                for (let j = 0; j < 5.5; j += 0.5) {
+                    if (users[i].rating === j) {
+                        star5_rating[i].setAttribute('data-rate', j);
+                    }
+                }
+            }
+
+            // コンポーネントのルートノード
+            let nodeApp = document.querySelector('#app');
+
+            // セレクトボックスのイベントハンドラを登録
+            let nodeSelect = nodeApp.querySelector('.search__sorting');
+            nodeSelect.addEventListener('change', onOrderChanged, false);
+
+            // 初期表示時のレビューノードリスト（保存用）
+            let nodeItemsOrg = nodeApp.querySelectorAll('.listItem');
+
+            // 並び順の変更イベントハンドラ
+            function onOrderChanged(event) {
+                let nodeList = nodeApp.querySelector('.reviewList');
+                let nodeItems = nodeApp.querySelectorAll('.listItem');
+
+                // レビューノードのリストを新しい配列に詰め替える
+                let newList = [];
+                for (let i = 0; i < nodeItems.length; i++) {
+                    newList.push(nodeItems[i]);
+                }
+
+                // DOMから全てのレビューノードを削除する
+                while (nodeList.firstChild) {
+                    nodeList.removeChild(nodeList.firstChild);
+                }
+
+                //「選択してください」が選択されている場合
+                if (event.target.value === '選択してください') {
+                    // 初期表示時のレビューノードを復元する
+                    for (let i = 0; i < newList.length; i++) {
+                        nodeList.appendChild(nodeItemsOrg[i]);
+                    }
+                }
+                // 「高い順」が選択されている場合
+                else if (event.target.value === '高い順') {
+                    // 配列を並び替え
+                    newList.sort(function (a, b) {
+                        // レビュー評価のノードから数値を読み取る
+                        let prevRating = parseInt(a.querySelector('.rating').textContent);
+                        let currentRating = parseInt(b.querySelector('.rating').textContent);
+                        return currentRating - prevRating;
+                    });
+                    // 並び替え後のレビューノードをDOMに追加する
+                    for (let i = 0; i < newList.length; i++) {
+                        nodeList.appendChild(newList[i]);
+                    }
+                }
+                // 「低い順」が選択されている場合
+                else if (event.target.value === '低い順') {
+                    // 配列を並び替え
+                    newList.sort(function (a, b) {
+                        // レビュー評価のノードから数値を読み取る
+                        let prevRating = parseInt(a.querySelector('.rating').textContent);
+                        let currentRating = parseInt(b.querySelector('.rating').textContent);
+                        return prevRating - currentRating;
+                    });
+                    // 並び替え後のレビューノードをDOMに追加する
+                    for (let i = 0; i < newList.length; i++) {
+                        nodeList.appendChild(newList[i]);
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
