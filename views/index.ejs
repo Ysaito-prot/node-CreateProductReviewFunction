@@ -49,6 +49,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
         <script>
             let users = JSON.parse('<%= JSON.stringify(users) %>'.replace(/&#34;/g, '"'));
+            let ratingASC = JSON.parse('<%= JSON.stringify(ratingASC) %>'.replace(/&#34;/g, '"'));
+            let ratingDESC = JSON.parse('<%= JSON.stringify(ratingDESC) %>'.replace(/&#34;/g, '"'));
+            let rating5users = JSON.parse('<%= JSON.stringify(rating5users) %>'.replace(/&#34;/g, '"'));
+            let rating4users = JSON.parse('<%= JSON.stringify(rating4users) %>'.replace(/&#34;/g, '"'));
+            let rating3users = JSON.parse('<%= JSON.stringify(rating3users) %>'.replace(/&#34;/g, '"'));
+            let rating2users = JSON.parse('<%= JSON.stringify(rating2users) %>'.replace(/&#34;/g, '"'));
+            let rating1users = JSON.parse('<%= JSON.stringify(rating1users) %>'.replace(/&#34;/g, '"'));
+
             // 評価マークの表示
             let star5_rating = document.querySelectorAll('.star5_rating');
             for (let i = 0; i < users.length; i++) {
@@ -70,97 +78,74 @@
             let nodeSelect2 = nodeApp.querySelector('.search__filter');
             nodeSelect2.addEventListener('change', onFilterChanged, false);
 
-            // 初期表示時のレビューノードリスト（保存用）
-            let nodeItemsOrg = nodeApp.querySelectorAll('.listItem');
-
             // 並び順の変更イベントハンドラ
             function onOrderChanged(event) {
-                let nodeList = nodeApp.querySelector('.reviewList');
-                let nodeItems = nodeApp.querySelectorAll('.listItem');
-
-                // レビューノードのリストを新しい配列に詰め替える
-                let newList = [];
-                for (let i = 0; i < nodeItems.length; i++) {
-                    newList.push(nodeItems[i]);
-                }
-
-                // DOMから全てのレビューノードを削除する
-                while (nodeList.firstChild) {
-                    nodeList.removeChild(nodeList.firstChild);
-                }
-
                 //「選択してください」が選択されている場合
                 if (event.target.value === '選択してください') {
-                    // 初期表示時のレビューノードを復元する
-                    for (let i = 0; i < newList.length; i++) {
-                        nodeList.appendChild(nodeItemsOrg[i]);
-                    }
+                    listChange(users);
                 }
                 // 「高い順」が選択されている場合
                 else if (event.target.value === '高い順') {
-                    // 配列を並び替え
-                    newList.sort(function (a, b) {
-                        // レビュー評価のノードから数値を読み取る
-                        let prevRating = parseInt(a.querySelector('.rating').textContent);
-                        let currentRating = parseInt(b.querySelector('.rating').textContent);
-                        return currentRating - prevRating;
-                    });
-                    // 並び替え後のレビューノードをDOMに追加する
-                    for (let i = 0; i < newList.length; i++) {
-                        nodeList.appendChild(newList[i]);
-                    }
+                    listChange(ratingDESC);
                 }
                 // 「低い順」が選択されている場合
                 else if (event.target.value === '低い順') {
-                    // 配列を並び替え
-                    newList.sort(function (a, b) {
-                        // レビュー評価のノードから数値を読み取る
-                        let prevRating = parseInt(a.querySelector('.rating').textContent);
-                        let currentRating = parseInt(b.querySelector('.rating').textContent);
-                        return prevRating - currentRating;
-                    });
-                    // 並び替え後のレビューノードをDOMに追加する
-                    for (let i = 0; i < newList.length; i++) {
-                        nodeList.appendChild(newList[i]);
-                    }
+                    listChange(ratingASC);
                 }
             }
+
             // フィルターの変更イベントハンドラ
             function onFilterChanged(event) {
-                let nodeItems = nodeApp.querySelectorAll('.listItem'); // レビューノードのリスト
-                // レビューノードのリストを新しい配列に詰め替える
-                let newList = [];
-                for (let i = 0; i < nodeItems.length; i++) {
-                    newList.push(nodeItems[i]);
-                }
-                // 全てのレビューノードをいったん表示する
-                for (let i = 0; i < nodeItems.length; i++) {
-                    showNode(nodeItems[i]);
-                }
                 //「選択してください」が選択されている場合
                 if (event.target.value === '選択してください') {
-                    // 初期表示時のレビューノードを復元する
-                    for (let i = 0; i < newList.length; i++) {
-                        nodeList.appendChild(nodeItemsOrg[i]);
-                    }
+                    listChange(users);
                 }
-                //「選択してください」以外が選択されている場合
-                else {
-                    for (let i = 0; i < nodeItems.length; i++) {
-                        if ((parseInt(nodeItems[i].querySelector('.rating').textContent)) !== parseInt(event.target.value)) {
-                            // このレビューを非表示にする
-                            hideNode(nodeItems[i]);
-                        }
-                    }
+                //「星5」が選択されている場合
+                if (event.target.value === '5') {
+                    listChange(rating5users);
+                }
+                //「星4」が選択されている場合
+                if (event.target.value === '4') {
+                    listChange(rating4users);
+                }
+                //「星3」が選択されている場合
+                if (event.target.value === '3') {
+                    listChange(rating3users);
+                }
+                //「星2」が選択されている場合
+                if (event.target.value === '2') {
+                    listChange(rating2users);
+                }
+                //「星1」が選択されている場合
+                if (event.target.value === '1') {
+                    listChange(rating1users);
                 }
             }
-            // ノードを非表示にする関数
-            function hideNode(node) {
-                node.setAttribute('style', 'display:none;');
-            }
-            // ノードを表示する関数
-            function showNode(node) {
-                node.removeAttribute('style');
+
+            // リスト変更の関数
+            function listChange(x) {
+                let nodeList = nodeApp.querySelector('.reviewList');
+                let newList = [];
+                newList = x;
+                nodeList.innerHTML = "";
+                for (let i = 0; i < newList.length; i++) {
+                    nodeList.insertAdjacentHTML('beforeend', `
+                        <li class="listItem">
+                            <div class="userInfo">
+                                <h2 class="userName">${newList[i].username}</h2>
+                                <div class="age"> 年齢：${newList[i].age} 歳 </div>
+                            </div>
+                            <span class="star5_rating"></span>
+                            <span class="rating">
+                                ${newList[i].rating}
+                            </span>
+                            <div class="reason">
+                                ${newList[i].reason}
+                            </div>
+                            <div class="edit"><button class="editBtn"><a href="/edit/${newList[i].id}">レビューの更新</a></button></div>
+                        </li>
+                       `)
+                }
             }
 
             // 年代毎のグラフ作成
